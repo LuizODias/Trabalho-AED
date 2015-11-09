@@ -2,9 +2,9 @@
 
 FUNÇÕES MÍNIMAS:
 
-( )Inserção de um amigo //cada um contem Nome, Telefone e Email. Não podem ter nomes iguais
-( )Inserção de deslocamento //Possui nome Cidade, Estado, Pais. Ou Cidade, Pais. Sem localidades iguais
-( )Inserção de viagem //Sequência de deslocamentos, caso não seja possivel mensagem de erro
+( )Inserção de um amigo //cada um contem Nome, Telefone e Email. Não podem ter nomes iguais;
+( )Inserção de deslocamento //Possui nome Cidade, Estado, Pais. Ou Cidade, Pais. Sem localidades iguais;
+( )Inserção de viagem //Sequência de deslocamentos, caso não seja possivel mensagem de erro;
 
 Inserção de viagem:
       Se destino é existente;
