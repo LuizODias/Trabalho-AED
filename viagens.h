@@ -8,11 +8,11 @@ struct amigo{
 };
 typedef struct amigo Amigo;
 
-struct viagem{
+struct deslocamento{
     char cidade[30], estado[30], pais[30];
-    struct viagem *ant, *prox;
+    struct deslocamento *ant, *prox;
 };
-typedef struct viagem Viagem;
+typedef struct deslocamento Deslocamento;
 
 struct no{
     char data[10];
@@ -23,12 +23,13 @@ typedef struct no No;
 
 //CRIA AS LISTAS
 No* criaNo();
-Viagem* criaViagem();
+Deslocamento* criaDeslocamento();
 Amigo* criaAmigo();
 
 //ADICIONAR OS AMIGOS
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email);
+Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado);
 
 //CHECAR ELEMENTOS REPETIDOS DA LISTA
 int checaAmigos(Amigo* l, char* nome);
-int checaViagem(Viagem* l, char* cidade);
+int checaViagem(Deslocamento* l, char* cidade);
