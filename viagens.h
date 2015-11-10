@@ -20,8 +20,15 @@ struct no{
 };
 typedef struct no No;
 
+
+//CRIA AS LISTAS
 No* criaNo();
 Viagem* criaViagem();
 Amigo* criaAmigo();
 
+//ADICIONAR OS AMIGOS
+Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email);
 
+//CHECAR ELEMENTOS REPETIDOS DA LISTA
+int checaAmigos(Amigo* l, char* nome);
+int checaViagem(Viagem* l, char* cidade);
