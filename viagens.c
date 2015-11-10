@@ -55,7 +55,7 @@ int checaAmigos(Amigo* l, char* nome){
     Amigo* aux=l;
 
     while((aux!=NULL)){
-        if(strcmp(nome,aux->nome)==0){
+        if(strcmp(strupr(nome),strupr(aux->nome))==0){
             //CASO EXISTA ALGUEM COM O MESMO NOME NA LISTA, A FUNÇÃO RETORNARÁ 1 PARA O VERIFICADOR!
             return 1;
         }
