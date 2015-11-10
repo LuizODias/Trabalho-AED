@@ -4,7 +4,7 @@ No* criaNo(){
     return NULL;
 }
 
-Viagem* criaViagem(){
+Deslocamento* criaDeslocamento(){
     return NULL;
 }
 
@@ -15,54 +15,36 @@ Amigo* criaAmigo(){
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email){
     Amigo* aux=l, *novo;
 
-    int verificador=0;
-    /*
-    O verificador e a variavel que contera o valor da funçao checaAmigos.
-    Essa funçao tem como objetivo checar toda a lista de amigos, e verificar se o novo amigo a ser inserido
-    ja existe. Caso exista alguem com mesmo nome, o verificador passara a valer 1. Caso contrario continuara com 0.
-    */
-    verificador=checaAmigos(l,nome);
 
-    //CHECAGEM DO VERIFICADOR
-    if(verificador==1){
-        printf("PESSOA JA CADASTRADA!");
-        return l;
+    novo=(Amigo*)malloc(sizeof(Amigo));
+
+    //ADICIONA OS NOVOS ELEMENTOS
+    strcpy(nome,novo->nome);
+    strcpy(telefone,novo->telefone);
+    strcpy(email,novo->email);
+
+    //CASO A LISTA ESTEJA VAZIA
+    if(aux==NULL){
+        novo->ant=NULL;
+        novo->prox=NULL;
+
+        return novo;
     }
+
     else{
-        novo=(Amigo*)malloc(sizeof(Amigo));
-
-        //ADICIONA OS NOVOS ELEMENTOS
-        strcpy(nome,novo->nome);
-        strcpy(telefone,novo->telefone);
-        strcpy(email,novo->email);
-
-        //CASO A LISTA ESTEJA VAZIA
-        if(aux==NULL){
+        if(aux==l){
             novo->ant=NULL;
-            novo->prox=NULL;
-
-            return novo;
+            novo->prox=l;
+            if(l!=NULL){
+                l->ant=novo;
+            }
         }
-
         else{
-            while((aux->prox!=NULL)&&(strcmp(aux->nome,nome)>1)){
-                aux=aux->prox;
-            }
-            if(aux->ant==NULL){
-                aux->ant=novo;
+            if(aux!=NULL){
+                novo->ant=aux->ant;
                 novo->prox=aux;
-                novo->ant=NULL;
-            }
-            if(aux->prox==NULL){
-                aux->prox=novo;
-                novo->ant=aux;
-                novo->prox=NULL;
-            }
-            else{
-                novo->prox=aux->prox;
-                aux->prox->ant=novo;
-                aux->prox=novo;
-                novo->ant=aux;
+                aux->ant->prox=novo;
+                aux->ant=novo;
             }
         }
     }
@@ -73,7 +55,7 @@ int checaAmigos(Amigo* l, char* nome){
     Amigo* aux=l;
 
     while((aux!=NULL)){
-        if(strcmp(aux->nome,nome)==0){
+        if(strcmp(nome,aux->nome)==0){
             //CASO EXISTA ALGUEM COM O MESMO NOME NA LISTA, A FUNÇÃO RETORNARÁ 1 PARA O VERIFICADOR!
             return 1;
         }
@@ -84,8 +66,8 @@ int checaAmigos(Amigo* l, char* nome){
     return 0;
 }
 
-Viagem* insereViagem(Viagem* l, char* cidade, char* pais, char* estado){
-    Viagem* aux=l, *novo;
+Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado){
+    Deslocamento* aux=l, *novo;
 
     int verificador=0;
     /*
@@ -101,7 +83,7 @@ Viagem* insereViagem(Viagem* l, char* cidade, char* pais, char* estado){
         return l;
     }
     else{
-        novo=(Viagem*)malloc(sizeof(Viagem));
+        novo=(Deslocamento*)malloc(sizeof(Deslocamento));
 
         //ADICIONA OS NOVOS ELEMENTOS
         strcpy(cidade,novo->cidade);
@@ -141,8 +123,8 @@ Viagem* insereViagem(Viagem* l, char* cidade, char* pais, char* estado){
     return l;
 }
 
-int checaViagem(Viagem* l, char* cidade){
-    Viagem* aux=l;
+int checaViagem(Deslocamento* l, char* cidade){
+    Deslocamento* aux=l;
 
     while(aux!=NULL){
         if(strcmp(aux->cidade,cidade)==0){
