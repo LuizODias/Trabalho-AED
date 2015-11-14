@@ -1,6 +1,6 @@
 #include "viagens.h"
 
-No* criaNo(){
+Data* criaNo(){
     return NULL;
 }
 
@@ -12,6 +12,7 @@ Amigo* criaAmigo(){
     return NULL;
 }
 
+//Lista Linear Duplamente
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email){
     Amigo* aux=l, *novo;
 
@@ -66,60 +67,47 @@ int checaAmigos(Amigo* l, char* nome){
     return 0;
 }
 
+//Lista Linear Duplamente
 Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado){
     Deslocamento* aux=l, *novo;
 
-    int verificador=0;
-    /*
-    O verificador e a variavel que contera o valor da funçao checaViagem.
-    Essa funçao tem como objetivo checar toda a lista de cidades, e verificar se a nova cidade a ser inserida
-    ja existe. Caso exista alguma com mesmo nome, o verificador passara a valer 1. Caso contrario continuara com 0.
-    */
-    verificador=checaViagem(l,cidade);
+    novo=(Deslocamento*)malloc(sizeof(Deslocamento));
 
-    //CHECAGEM DO VERIFICADOR
-    if(verificador==1){
-        printf("CIDADE JA CADASTRADA!");
-        return l;
+    //ADICIONA OS NOVOS ELEMENTOS
+    strcpy(cidade,novo->cidade);
+    strcpy(pais,novo->pais);
+    strcpy(estado,novo->estado);
+
+    //CASO A LISTA ESTEJA VAZIA
+    if(aux==NULL){
+        novo->ant=NULL;
+        novo->prox=NULL;
+
+        return novo;
     }
+
     else{
-        novo=(Deslocamento*)malloc(sizeof(Deslocamento));
-
-        //ADICIONA OS NOVOS ELEMENTOS
-        strcpy(cidade,novo->cidade);
-        strcpy(pais,novo->pais);
-        strcpy(estado,novo->estado);
-
-        //CASO A LISTA ESTEJA VAZIA
-        if(aux==NULL){
-            novo->ant=NULL;
-            novo->prox=NULL;
-
-            return novo;
+        while((aux->prox!=NULL)&&(strcmp(aux->cidade,cidade)>1)){
+            aux=aux->prox;
         }
-
+        if(aux->ant==NULL){
+            aux->ant=novo;
+            novo->prox=aux;
+            novo->ant=NULL;
+        }
+        if(aux->prox==NULL){
+            aux->prox=novo;
+            novo->ant=aux;
+            novo->prox=NULL;
+        }
         else{
-            while((aux->prox!=NULL)&&(strcmp(aux->cidade,cidade)>1)){
-                aux=aux->prox;
-            }
-            if(aux->ant==NULL){
-                aux->ant=novo;
-                novo->prox=aux;
-                novo->ant=NULL;
-            }
-            if(aux->prox==NULL){
-                aux->prox=novo;
-                novo->ant=aux;
-                novo->prox=NULL;
-            }
-            else{
-                novo->prox=aux->prox;
-                aux->prox->ant=novo;
-                aux->prox=novo;
-                novo->ant=aux;
-            }
+            novo->prox=aux->prox;
+            aux->prox->ant=novo;
+            aux->prox=novo;
+            novo->ant=aux;
         }
     }
+
     return l;
 }
 
@@ -134,6 +122,56 @@ int checaViagem(Deslocamento* l, char* cidade){
         aux=aux->prox;
     }
     //NAO TEM CIDADES COM MESMO NOME
+    return 0;
+}
+
+//Lista Circular Duplamente
+Data* insereData(Data* l, char* dia){
+    Data* novo, *aux=l;
+
+    novo=(Data*)malloc(sizeof(Data));
+
+    strcpy(dia,novo->data);
+
+    if(l==NULL){
+        novo->prox=novo;
+        novo->ant=novo;
+
+        return novo;
+    }
+    else{
+        do{
+            aux=aux->prox;
+        }while((aux!=l)&&(strcmp(aux->data,dia)<0));
+
+    if(aux==l){
+        aux->ant->prox=novo;
+        novo->ant=aux->ant;
+        novo->prox=aux;
+        aux->ant=novo;
+    }
+    else{
+        novo->prox=aux;
+        novo->ant=aux->ant;
+        aux->ant->prox=novo;
+        aux->ant=novo;
+    }
+    }
+    return l;
+}
+
+int checaData(Data *l, char* dia){
+    Data *aux=l;
+
+    do{
+        if(strcmp(aux->data,dia)==0){
+            //DATA REPETIDA
+            return 1;
+        }
+        aux=aux->prox;
+    }while(aux!=l);
+
+    //NENHUMA DATA IGUAL
     return 0;
 }
 
