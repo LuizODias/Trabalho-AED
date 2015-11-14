@@ -14,22 +14,24 @@ struct deslocamento{
 };
 typedef struct deslocamento Deslocamento;
 
-struct no{
+struct data{
     char data[10];
-    struct no *ant, *prox;
+    struct data *ant, *prox;
 };
-typedef struct no No;
+typedef struct data Data;
 
 
 //CRIA AS LISTAS
-No* criaNo();
+Data* criaNo();
 Deslocamento* criaDeslocamento();
 Amigo* criaAmigo();
 
-//ADICIONAR OS AMIGOS
+//ADICIONAR DADOS
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email);
 Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado);
+Data* insereData(Data* l, char* dia);
 
 //CHECAR ELEMENTOS REPETIDOS DA LISTA
 int checaAmigos(Amigo* l, char* nome);
 int checaViagem(Deslocamento* l, char* cidade);
+int checaData(Data *l, char* dia);
