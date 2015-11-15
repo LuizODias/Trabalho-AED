@@ -4,15 +4,17 @@ int main()
 {
     Amigo *amigos;
     //*amigos, SALVA A LISTA DE TODOS AMIGOS
+    //*amigos_viagem, AMIGOS QUE ESTARAO EM CADA VIAGEM
+
     Deslocamento *deslocamentos;
     //*deslocamentos, SALVA A LISTA DE TODOS DESLOCAMENTOS
+
     Data *dias;
     //*dias, LISTA COM DIAS DAS VIAGENS
 
     amigos=criaAmigo();
     deslocamentos=criaDeslocamento();
     dias=criaNo();
-
 
     int opcao=0,verificador=0, verificador2=0;
     /*opcao, COLETA AS OPCOES DO USUARIO
