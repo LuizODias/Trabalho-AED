@@ -53,4 +53,4 @@ void gravaArquivo(Data* l, FILE* entrada);
 //IMPRESSAO
 void imprimeAmigos(Amigo* p);
 void imprimeDeslocamento(Deslocamento* p);
-
+void imprimeViagem(Data* l);
