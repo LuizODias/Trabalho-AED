@@ -166,7 +166,7 @@ int main()
                 */
 
                 verificador=checaData(dias,informa1);
-                printf("Sim!To na main\n");
+
                 if(verificador==0){
                     dias=insereData(dias,informa1,amigos,deslocamentos);
                 }
@@ -177,6 +177,10 @@ int main()
                 printf("\n\n\n");
                 imprimeDeslocamento(deslocamentos);
                 printf("\n\n\n");
+                break;
+            case 5:
+                imprimeViagem(dias);
+                break;
         }
     }while(opcao!=8);
 
