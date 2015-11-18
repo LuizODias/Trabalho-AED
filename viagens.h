@@ -16,23 +16,25 @@ typedef struct deslocamento Deslocamento;
 
 struct viag{
     char cidade[30],horas[15];
-    struct viag *ant, *prox,*migs;
+    struct viag *ant, *prox,*lista_amigos;
 };
 typedef struct viag Viagens;
 
 struct data{
     char data[10];
-    struct data *ant, *prox,*viage;
+    struct data *ant, *prox,*lista_viagem;
 };
 typedef struct data Data;
 
 //CRIA AS LISTAS
+
 Data* criaNo();
 Deslocamento* criaDeslocamento();
 Amigo* criaAmigo();
 
 //ADICIONAR DADOS
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email);
+Amigo* insereFim(Amigo* l, char* nome,char* telefone, char* email);
 Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado);
 Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places);
 
@@ -44,3 +46,11 @@ int checaData(Data *l, char* dia);
 //INSERIR NA VIAGEM
 Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends);
 Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places);
+
+void gravaArquivo(Data* l, FILE* entrada);
+
+
+//IMPRESSAO
+void imprimeAmigos(Amigo* p);
+void imprimeDeslocamento(Deslocamento* p);
+
