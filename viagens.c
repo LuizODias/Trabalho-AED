@@ -14,49 +14,76 @@ Amigo* criaAmigo(){
 
 //Lista Linear Duplamente
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email){
-    Amigo* aux=l, *novo;
+    Amigo *novo,*p;
+    p=l;
 
+    while((p!=NULL)&&(strcmp(p->nome,nome)<0)){
+        p=p->prox;
+    }
 
     novo=(Amigo*)malloc(sizeof(Amigo));
 
-    //ADICIONA OS NOVOS ELEMENTOS
-    strcpy(nome,novo->nome);
-    strcpy(telefone,novo->telefone);
-    strcpy(email,novo->email);
+    strcpy(novo->nome,nome);
+    strcpy(novo->telefone,telefone);
+    strcpy(novo->email,email);
 
-    //CASO A LISTA ESTEJA VAZIA
-    if(aux==NULL){
+    //SE FOR INSERIDO NO INICIO
+    if(l==p){
         novo->ant=NULL;
-        novo->prox=NULL;
-
-        return novo;
+        novo->prox=l;
+        if(l!=NULL)
+            l->ant=novo;
+        l=novo;
     }
-
     else{
-        if(aux==l){
-            novo->ant=NULL;
-            novo->prox=l;
-            if(l!=NULL){
-                l->ant=novo;
-            }
+        //INSERIDO NO MEIO DA LISTA
+        if(p!=NULL){
+            novo->ant=p->ant;
+            novo->prox=p;
+            p->ant->prox=novo;
+            p->ant=novo;
         }
         else{
-            if(aux!=NULL){
-                novo->ant=aux->ant;
-                novo->prox=aux;
-                aux->ant->prox=novo;
-                aux->ant=novo;
-            }
+            //INSERIR NO FIM
+            l=insereFim(l,nome,telefone,email);
         }
     }
     return l;
 }
+//COMPLEMENTO INSERE AMIGO
+Amigo* insereFim(Amigo* l, char* nome,char* telefone, char* email){
+    Amigo* aux,*novo;
+    aux=l;
+
+    novo=(Amigo*)malloc(sizeof(Amigo));
+
+    strcpy(novo->nome,nome);
+    strcpy(novo->telefone,telefone);
+    strcpy(novo->email,email);
+
+    if(l==NULL){
+        novo->ant=NULL;
+        novo->prox=l;
+        return l;
+    }
+
+    while(aux->prox!=NULL){
+        aux=aux->prox;
+    }
+
+    novo->ant=aux;
+    novo->prox=NULL;
+    aux->prox=novo;
+
+    return l;
+}
+
 
 int checaAmigos(Amigo* l, char* nome){
     Amigo* aux=l;
 
     while((aux!=NULL)){
-        if(strcmp(strupr(nome),strupr(aux->nome))==0){
+        if(strcmp(nome,aux->nome)==0){
             //CASO EXISTA ALGUEM COM O MESMO NOME NA LISTA, A FUNÇÃO RETORNARÁ 1 PARA O VERIFICADOR!
             return 1;
         }
@@ -69,46 +96,20 @@ int checaAmigos(Amigo* l, char* nome){
 
 //Lista Linear Duplamente
 Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado){
-    Deslocamento* aux=l, *novo;
+    Deslocamento* novo;
 
     novo=(Deslocamento*)malloc(sizeof(Deslocamento));
 
-    //ADICIONA OS NOVOS ELEMENTOS
-    strcpy(cidade,novo->cidade);
-    strcpy(pais,novo->pais);
-    strcpy(estado,novo->estado);
+    strcpy(novo->cidade,cidade);
+    strcpy(novo->estado,estado);
+    strcpy(novo->pais,pais);
 
-    //CASO A LISTA ESTEJA VAZIA
-    if(aux==NULL){
-        novo->ant=NULL;
-        novo->prox=NULL;
+    novo->ant=NULL;
+    novo->prox=l;
+    if(l!=NULL)
+        l->ant=novo;
 
-        return novo;
-    }
-
-    else{
-        while((aux->prox!=NULL)&&(strcmp(aux->cidade,cidade)>1)){
-            aux=aux->prox;
-        }
-        if(aux->ant==NULL){
-            aux->ant=novo;
-            novo->prox=aux;
-            novo->ant=NULL;
-        }
-        if(aux->prox==NULL){
-            aux->prox=novo;
-            novo->ant=aux;
-            novo->prox=NULL;
-        }
-        else{
-            novo->prox=aux->prox;
-            aux->prox->ant=novo;
-            aux->prox=novo;
-            novo->ant=aux;
-        }
-    }
-
-    return l;
+    return novo;
 }
 
 int checaViagem(Deslocamento* l, char* cidade){
@@ -131,6 +132,7 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
     char nome[30];
     Amigo* novo;
 
+    printf("Sim!To no amigo\n");
     if(all_friends==NULL){
         printf("NENHUMA PESSO FOI CADASTRADA!");
         return NULL;
@@ -154,7 +156,7 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
     strcpy(nome,novo->nome);
 
     novo->ant=NULL;
-    novo->prox=l->migs->prox;
+    novo->prox=l;
 
     do{
         printf("INSERIR MAIS ALGUEM?\n");
@@ -181,11 +183,11 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
         return NULL;
     }
 
-    aux=l->viage;
-
+    aux=l->lista_viagem;
+    printf("Sim!To na viagem\n");
     novo=(Viagens*)malloc(sizeof(Viagens));
 
-    novo->migs=amigoNaViagem(novo->migs,all_friends);
+    novo->lista_amigos=amigoNaViagem(novo->lista_amigos,all_friends);
 
     do{
         printf("CIDADE: ");
@@ -228,7 +230,7 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
             novo->ant=aux;
             novo->prox=NULL;
         }
-        if(aux==l->viage){
+        if(aux==l->lista_viagem){
             aux->ant=novo;
             novo->prox=aux;
             novo->ant=NULL;
@@ -247,11 +249,13 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
 Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places){
     Data* novo, *aux=l;
 
+
+
     novo=(Data*)malloc(sizeof(Data));
 
     strcpy(dia,novo->data);
-
-    novo->viage=insereViagem(novo->viage,all_friends,all_places);
+    printf("Sim!To na data\n");
+    novo->lista_viagem=insereViagem(novo->lista_viagem,all_friends,all_places);
 
     if(l==NULL){
         novo->prox=novo;
@@ -280,8 +284,14 @@ Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places
     return l;
 }
 
+
 int checaData(Data *l, char* dia){
     Data *aux=l;
+
+    //CASO LISTA ESTEJA VAZIA
+    if(aux==NULL){
+        return 0;
+    }
 
     do{
         if(strcmp(aux->data,dia)==0){
@@ -295,4 +305,33 @@ int checaData(Data *l, char* dia){
     return 0;
 }
 
+void gravaArquivo(Data* l, FILE* entrada){
+    Data* data=l;
+    Data* viagem=l->lista_viagem;
+
+}
+
+void imprimeAmigos(Amigo* p){
+    Amigo* aux=p;
+
+    while(aux!=NULL){
+        printf("%s\n",aux->nome);
+        printf("%s\n",aux->email);
+        printf("%s\n",aux->telefone);
+        printf("--------------------------------------------------\n\n");
+        aux=aux->prox;
+    }
+}
+
+void imprimeDeslocamento(Deslocamento* p){
+    Deslocamento* aux=p;
+
+    while(aux!=NULL){
+        printf("%s\n",aux->cidade);
+        printf("%s\n",aux->estado);
+        printf("%s\n",aux->pais);
+        printf("--------------------------------------------------\n\n");
+        aux=aux->prox;
+    }
+}
 
