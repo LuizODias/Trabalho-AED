@@ -132,7 +132,6 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
     char nome[30];
     Amigo* novo;
 
-    printf("Sim!To no amigo\n");
     if(all_friends==NULL){
         printf("NENHUMA PESSO FOI CADASTRADA!");
         return NULL;
@@ -143,7 +142,7 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
     do{
         printf("AMIGO: ");
         setbuf(stdin,NULL);
-        gets(nome);
+        strupr(gets(nome));
         system("cls");
 
         verificador=checaAmigos(all_friends,nome);
@@ -153,7 +152,7 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
         }
     }while(verificador!=1);
 
-    strcpy(nome,novo->nome);
+    strcpy(novo->nome,nome);
 
     novo->ant=NULL;
     novo->prox=l;
@@ -183,16 +182,16 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
         return NULL;
     }
 
-    aux=l->lista_viagem;
-    printf("Sim!To na viagem\n");
     novo=(Viagens*)malloc(sizeof(Viagens));
 
     novo->lista_amigos=amigoNaViagem(novo->lista_amigos,all_friends);
 
+    aux=l;
+
     do{
         printf("CIDADE: ");
         setbuf(stdin,NULL);
-        gets(cidade);
+        strupr(gets(cidade));
         system("cls");
 
         verificador=checaViagem(all_places,cidade);
@@ -212,8 +211,8 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
     setbuf(stdin,NULL);
     gets(horas);
 
-    strcpy(cidade,novo->cidade);
-    strcpy(horas,novo->horas);
+    strcpy(novo->cidade,cidade);
+    strcpy(novo->horas,horas);
 
     //ATÉ AGORA OS DADOS FORAM COLETADOS, A PARTI DAQUI SERAO INSERIDOS DE ACORDO COM AS HORAS
     if(aux==NULL){
@@ -253,8 +252,8 @@ Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places
 
     novo=(Data*)malloc(sizeof(Data));
 
-    strcpy(dia,novo->data);
-    printf("Sim!To na data\n");
+    strcpy(novo->data,dia);
+    novo->lista_viagem=NULL;
     novo->lista_viagem=insereViagem(novo->lista_viagem,all_friends,all_places);
 
     if(l==NULL){
