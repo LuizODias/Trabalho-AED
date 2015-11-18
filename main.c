@@ -2,9 +2,12 @@
 
 int main()
 {
+    FILE *entrada;
+
+    entrada=fopen("Arquivo_das_viagens.txt","a+");
+
     Amigo *amigos;
     //*amigos, SALVA A LISTA DE TODOS AMIGOS
-    //*amigos_viagem, AMIGOS QUE ESTARAO EM CADA VIAGEM
 
     Deslocamento *deslocamentos;
     //*deslocamentos, SALVA A LISTA DE TODOS DESLOCAMENTOS
@@ -41,10 +44,11 @@ int main()
         //APOS A COLETA DA OPCAO, INICIA O QUE DEVE SER FEITO
         switch(opcao)
         {
+        //CASE 1 E PARA INSERÇÃO DE PESSOAS
         case 1:
             printf("NOME: ");
             setbuf(stdin,NULL);
-            gets(informa1);
+            strupr(gets(informa1));
             /*
             O verificador e a variavel que contera o valor da funçao checaAmigos.
             Essa funçao tem como objetivo checar toda a lista de amigos, e verificar se o novo amigo a ser inserido
@@ -62,7 +66,7 @@ int main()
             }
             else
             {
-                printf("NOME JA CADASTRADO!");
+                printf("NOME JA CADASTRADO!\n\n");
                 break;
             }
             //DADOS SAO ENVIADOS PARA FUNCAO
@@ -70,6 +74,7 @@ int main()
             system("cls");
             break;
 
+        //CASE 2 E PARA A INSERÇÃO DE DESLOCAMENTOS
         case 2:
             //Pergunta para verificar se é uma viagem para o exterior, tais casos afetarao a inserção da informação
             printf("VIAGEM PARA EXTERIOR?\n");
@@ -83,7 +88,7 @@ int main()
             {
                 printf("NOME CIDADE: ");
                 setbuf(stdin,NULL);
-                gets(informa1);
+                strupr(gets(informa1));
 
                 /*
                 O verificador e a variavel que contera o valor da funçao checaViagem.
@@ -96,7 +101,7 @@ int main()
                 {
                     printf("PAIS: ");
                     setbuf(stdin,NULL);
-                    gets(informa2);
+                    strupr(gets(informa2));
 
                     //POR SER VIAGEM AO EXTERIOR, NÃO É NECESSARIO O NOME DO ESTADO, QUE SERA SUBSTITUIDO POR -
                     strcpy(informa3,"-");
@@ -107,7 +112,7 @@ int main()
                 }
                 else
                 {
-                    printf("CIDADE JA CADASTRADA!");
+                    printf("CIDADE JA CADASTRADA!\n\n");
                     break;
                 }
             }
@@ -117,7 +122,7 @@ int main()
             {
                 printf("NOME CIDADE: ");
                 setbuf(stdin,NULL);
-                gets(informa1);
+                strupr(gets(informa1));
 
                 /*
                 O verificador e a variavel que contera o valor da funçao checaViagem.
@@ -130,11 +135,11 @@ int main()
                 {
                     printf("ESTADO: ");
                     setbuf(stdin,NULL);
-                    gets(informa3);
+                    strupr(gets(informa3));
 
                     printf("PAIS: ");
                     setbuf(stdin,NULL);
-                    gets(informa2);
+                    strupr(gets(informa2));
 
                     //ENVIA DADOS PARA SEREM INSERIDOS
                     deslocamentos=insereDeslocamento(deslocamentos,informa1,informa2,informa3);
@@ -142,14 +147,40 @@ int main()
                 }
                 else
                 {
-                    printf("CIDADE JA CADASTRADA!");
+                    printf("CIDADE JA CADASTRADA!\n\n");
                     break;
                 }
             }
             break;
+
+            //CASE 3 E PARA O CADASTRAMENTO DE VIAGENS
+            case 3:
+                printf("DIA: ");
+                setbuf(stdin,NULL);
+                gets(informa1);
+
+                /*
+                O verificador e a variavel que contera o valor da funçao checaData.
+                Essa funçao tem como objetivo checar toda a lista de datas, e verificar se a nova data a ser inserida
+                ja existe. Caso exista alguma no mesmo dia, o verificador passara a valer 1. Caso contrario continuara com 0.
+                */
+
+                verificador=checaData(dias,informa1);
+                printf("Sim!To na main\n");
+                if(verificador==0){
+                    dias=insereData(dias,informa1,amigos,deslocamentos);
+                }
+                break;
+
+            case 4:
+                imprimeAmigos(amigos);
+                printf("\n\n\n");
+                imprimeDeslocamento(deslocamentos);
+                printf("\n\n\n");
         }
     }while(opcao!=8);
 
+    void gravaArquivo(l,entrada);
 
 
 return 0;
