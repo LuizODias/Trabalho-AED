@@ -170,6 +170,9 @@ int main()
                 if(verificador==0){
                     dias=insereData(dias,informa1,amigos,deslocamentos);
                 }
+                if(verificador==1){
+                    dias=insere_na_mesma_data(dias,informa1,amigos,deslocamentos);
+                }
                 break;
 
             case 4:
