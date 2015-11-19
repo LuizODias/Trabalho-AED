@@ -146,14 +146,14 @@ int checaData(Data *l, char* dia){
 
 //FUNÇÕES DE INSERÇÃO DE VIAGEM
 //Lista duplamente
-Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
+Amigo* amigoNaViagem(Amigo* l,Amigo* all_friends){
     int verificador=0, opcao=0;
-    char nome[30];
+    char nome[50];
     Amigo* novo;
 
     //CASO A LISTA DE AMIGOS FOR VAZIA, RETORNARA PARA FUNÇÃO ANTERIOR
     if(all_friends==NULL){
-        printf("NENHUMA PESSO FOI CADASTRADA!");
+        printf("NENHUMA PESSOA FOI CADASTRADA!");
         return NULL;
     }
 
@@ -166,13 +166,13 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
         strupr(gets(nome));
         system("cls");
 
+        //VERIFICA CASO USUARIO JA FOI INSERIDO
         verificador=checaAmigos(all_friends,nome);
 
         if(verificador==0){
             printf("PESSOA NAO FOI CADASTRADA!\n\n");
         }
     }while(verificador!=1);
-
 
     strcpy(novo->nome,nome);
 
@@ -184,20 +184,21 @@ Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends){
     do{
         printf("INSERIR MAIS ALGUEM?\n");
         printf("1-SIM\n2-NAO\n");
+        printf("OPCAO: ");
         scanf("%d",&opcao);
         system("cls");
 
         if(opcao==1){
-            l=amigoNaViagem(l,all_friends);
+            novo->prox=amigoNaViagem(l,all_friends);
         }
     }while(opcao!=2);
 
     return l;
 }
 //Lista duplamente
-Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
+Viagens* insereViagem(Viagens* l,Amigo* all_friends, Deslocamento* all_places){
     int verificador=0;
-    char cidade[30],horas[10];
+    char cidade[30],horas[10],retorno[10];
     Viagens* novo, *aux;
 
     //CASO A LISTA DE LOCAIS CADASTRADOS ESTIVER VAZIA
@@ -238,8 +239,15 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
     setbuf(stdin,NULL);
     gets(horas);
 
+    printf("HORARIO DE RETORNO: ");
+    setbuf(stdin,NULL);
+    gets(retorno);
+    system("cls");
+
     strcpy(novo->cidade,cidade);
     strcpy(novo->horas,horas);
+    strcpy(novo->retorno,retorno);
+
 
     //ATÉ AGORA OS DADOS FORAM COLETADOS, A PARTIR DAQUI SERAO INSERIDOS DE ACORDO COM AS HORAS
     if(aux==NULL){
@@ -249,29 +257,52 @@ Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places){
         return novo;
     }
     else{
-        while((aux->prox!=NULL)&&(strcmp(aux->horas,horas)<0))
+        while((aux!=NULL)&&(strcmp(aux->horas,horas)<0)){
             aux=aux->prox;
-
-
-        if(aux->prox==NULL){
-            aux->prox=novo;
-            novo->ant=aux;
-            novo->prox=NULL;
         }
+
         if(aux==l){
-            aux->ant=novo;
-            novo->prox=aux;
             novo->ant=NULL;
+            novo->prox=l;
+            if(l!=NULL){
+                l->ant=novo;
+            }
             l=novo;
         }
         else{
-            aux->ant->prox=novo;
-            novo->ant=aux->ant;
-            novo->prox=aux;
-            aux->ant=novo;
+            if(aux!=NULL){
+                novo->ant=aux->ant;
+                novo->prox=aux;
+                aux->ant->prox=novo;
+                aux->ant=novo;
+            }
+            else{
+                l=insereViagemfim(l,cidade,horas);
+            }
         }
+        return l;
     }
-    //APOS SER INSERIDO NO LOCAL APROPRIADO, RETORNA A LISTA ATUALIZADA
+}
+//COMPLEMENTO insereViagem
+Viagens* insereViagemfim(Viagens* l, char* cidade, char* horas){
+    Viagens* aux=l;
+    Viagens* novo=(Viagens*)malloc(sizeof(Viagens));
+
+    strcpy(novo->cidade,cidade);
+    strcpy(novo->horas,horas);
+
+    if(l==NULL){
+        novo->ant=NULL;
+        novo->prox=l;
+        return l;
+    }
+    while(aux->prox!=NULL){
+        aux=aux->prox;
+    }
+    novo->ant=aux;
+    novo->prox=NULL;
+    aux->prox=novo;
+
     return l;
 }
 //Lista Circular Duplamente
@@ -314,13 +345,28 @@ Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places
     //APOS SER INSERIDO NO LOCAL CORRETO, RETORNA A LISTA ATUALIZADA
     return l;
 }
+//CASO JA EXISTA UMA MESMA DATA ALOCADA, A FUNÇÃO VIRA PRA CA, PARA NAO PRECISAR ALOCAR OUTRO ESPAÇO NA MEMORIA
+Data* insere_na_mesma_data(Data* l, char* dia, Amigo* all_friends, Deslocamento* all_places){
+    Data* aux=l;
+
+    do{
+        if(strcmp(aux->data,dia)==0){
+            l->lista_viagem=insereViagem(l->lista_viagem,all_friends,all_places);
+            return l;
+        }
+        aux=aux->prox;
+    }while((aux!=l)&&(strcmp(aux->data,dia)!=0));
+
+    return l;
+}
 
 
 void gravaArquivo(Data* l, FILE* entrada){
     Data* data=l;
-    Data* viagem=l->lista_viagem;
+    Viagens* viagem=l->lista_viagem;
 
 }
+
 
 //FUNÇÕES DE IMPRESSÃO
 void imprimeAmigos(Amigo* p){
@@ -348,18 +394,18 @@ void imprimeDeslocamento(Deslocamento* p){
 void imprimeViagem(Data* l){
     Data* p=l;
     Viagens* p1=p->lista_viagem;
-    Amigo* p3=p1->lista_amigos;
+    Amigo* p2=p1->lista_amigos;
 
     do{
         printf("%s\n",p->data);
         printf("%s as %s\n",p1->cidade, p1->horas);
-        while(p3!=NULL){
-            printf("%s, ",p3->nome);
-            p3=p3->prox;
+        while(p2!=NULL){
+            printf("%s, ",p2->nome);
+            p2=p2->prox;
         }
         printf("\n---------------------------------------------------------\n");
         p=p->prox;
         p1=p->lista_viagem;
-        p3=p1->lista_amigos;
+        p2=p1->lista_amigos;
     }while(p!=l);
 }
