@@ -15,14 +15,16 @@ struct deslocamento{
 typedef struct deslocamento Deslocamento;
 
 struct viag{
-    char cidade[30],horas[15];
-    struct viag *ant, *prox,*lista_amigos;
+    char cidade[30],horas[15],retorno[15];
+    struct viag *ant, *prox;
+    Amigo* lista_amigos;
 };
 typedef struct viag Viagens;
 
 struct data{
     char data[10];
-    struct data *ant, *prox,*lista_viagem;
+    struct data *ant, *prox;
+    Viagens* lista_viagem;
 };
 typedef struct data Data;
 
@@ -44,8 +46,12 @@ int checaViagem(Deslocamento* l, char* cidade);
 int checaData(Data *l, char* dia);
 
 //INSERIR NA VIAGEM
-Viagens* amigoNaViagem(Viagens* l,Amigo* all_friends);
-Data* insereViagem(Data* l,Amigo* all_friends, Deslocamento* all_places);
+Amigo* amigoNaViagem(Amigo* l,Amigo* all_friends);
+Viagens* insereViagem(Viagens* l,Amigo* all_friends, Deslocamento* all_places);
+Viagens* insereViagemfim(Viagens* l, char* cidade, char* horas);
+Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places);
+Data* insere_na_mesma_data(Data* l, char* dia, Amigo* all_friends, Deslocamento* all_places);
+
 
 void gravaArquivo(Data* l, FILE* entrada);
 
