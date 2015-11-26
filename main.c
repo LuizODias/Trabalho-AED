@@ -19,7 +19,7 @@ int main()
     deslocamentos=criaDeslocamento();
     dias=criaNo();
 
-    int opcao=0,verificador=0, verificador2=0;
+    int opcao=0,verificador=0, verificador2=0, info1=0,info2=0,info3=0,k=0;
     /*opcao, COLETA AS OPCOES DO USUARIO
       verificadores, IRAO COLETAR CERTAS INFORMACOES PARA SEREM VERIFICADAS
     */
@@ -137,9 +137,7 @@ int main()
                     setbuf(stdin,NULL);
                     strupr(gets(informa3));
 
-                    printf("PAIS: ");
-                    setbuf(stdin,NULL);
-                    strupr(gets(informa2));
+                    strcpy(informa2,"BRASIL");
 
                     //ENVIA DADOS PARA SEREM INSERIDOS
                     deslocamentos=insereDeslocamento(deslocamentos,informa1,informa2,informa3);
@@ -155,9 +153,9 @@ int main()
 
             //CASE 3 E PARA O CADASTRAMENTO DE VIAGENS
             case 3:
-                printf("DIA: ");
-                setbuf(stdin,NULL);
-                gets(informa1);
+
+                printf("DIA(dd/mm/aaaa): ");
+                scanf("%d/%d/%d",&info1,&info2,&info3);
 
                 /*
                 O verificador e a variavel que contera o valor da funçao checaData.
@@ -165,13 +163,25 @@ int main()
                 ja existe. Caso exista alguma no mesmo dia, o verificador passara a valer 1. Caso contrario continuara com 0.
                 */
 
-                verificador=checaData(dias,informa1);
+                verificador=checaData(dias,info1,info2,info3);
 
                 if(verificador==0){
-                    dias=insereData(dias,informa1,amigos,deslocamentos);
+                    dias=insereData(dias,info1,info2,info3,amigos,deslocamentos);
+                    if(k==0){
+                        do{
+                            k++;
+                            printf("INSERIR MAIS ALGUEM?\n");
+                            printf("1-SIM\n2-NAO\n");
+                            printf("OPCAO: ");
+                            scanf("%d",&verificador2);
+                            system("cls");
+                            if(verificador2==1)
+                                dias=insere_mais_um(dias,amigos);
+                        }while(verificador2!=2);
+                    }
                 }
                 if(verificador==1){
-                    dias=insere_na_mesma_data(dias,informa1,amigos,deslocamentos);
+                    dias=insere_na_mesma_data(dias,info1,info2,info3,amigos,deslocamentos);
                 }
                 break;
 
@@ -187,8 +197,6 @@ int main()
         }
     }while(opcao!=8);
 
-    void gravaArquivo(l,entrada);
-
-
 return 0;
 }
+
