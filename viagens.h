@@ -15,14 +15,15 @@ struct deslocamento{
 typedef struct deslocamento Deslocamento;
 
 struct viag{
-    char cidade[30],horas[15],retorno[15];
+    char cidade[30];
+    int h_h,h_m,r_h,r_m;
     struct viag *ant, *prox;
     Amigo* lista_amigos;
 };
 typedef struct viag Viagens;
 
 struct data{
-    char data[10];
+    int dia,mes,ano;
     struct data *ant, *prox;
     Viagens* lista_viagem;
 };
@@ -38,19 +39,22 @@ Amigo* criaAmigo();
 Amigo* insereAmigo(Amigo* l, char* nome, char* telefone, char* email);
 Amigo* insereFim(Amigo* l, char* nome,char* telefone, char* email);
 Deslocamento* insereDeslocamento(Deslocamento* l, char* cidade, char* pais, char* estado);
-Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places);
+
 
 //CHECAR ELEMENTOS REPETIDOS DA LISTA
 int checaAmigos(Amigo* l, char* nome);
 int checaViagem(Deslocamento* l, char* cidade);
-int checaData(Data *l, char* dia);
+int checaData(Data *l, int dia, int mes, int ano);
+Viagens* checa_hora_repetida(Viagens* l,char *nome);
 
 //INSERIR NA VIAGEM
-Amigo* amigoNaViagem(Amigo* l,Amigo* all_friends);
+Amigo* recebe_amigo_atualizado(Amigo* l, char* nome);
+Amigo* amigoNaViagem(Amigo* l,Amigo* all_friends,Viagens* viagens);
 Viagens* insereViagem(Viagens* l,Amigo* all_friends, Deslocamento* all_places);
-Viagens* insereViagemfim(Viagens* l, char* cidade, char* horas);
-Data* insereData(Data* l, char* dia,Amigo* all_friends, Deslocamento* all_places);
-Data* insere_na_mesma_data(Data* l, char* dia, Amigo* all_friends, Deslocamento* all_places);
+Viagens* insereViagemfim(Viagens* l, Viagens* novo);
+Data* insereData(Data* l, int dia,int mes,int ano,Amigo* all_friends, Deslocamento* all_places);
+Data* insere_na_mesma_data(Data* l, int dia, int mes,int ano, Amigo* all_friends, Deslocamento* all_places);
+Data* insere_mais_um(Data* l,Amigo* amigos);
 
 
 void gravaArquivo(Data* l, FILE* entrada);
