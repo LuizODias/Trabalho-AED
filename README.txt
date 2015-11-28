@@ -4,13 +4,13 @@ FUNÇÕES MÍNIMAS:
 
 (Ok)Inserção de um amigo //cada um contem Nome, Telefone e Email. Não podem ter nomes iguais;
 (Ok)Inserção de deslocamento //Possui nome Cidade, Estado, Pais. Ou Cidade, Pais. Sem localidades iguais;
-( )Inserção de viagem //Sequência de deslocamentos, caso não seja possivel mensagem de erro;
+(X)Inserção de viagem //Sequência de deslocamentos, caso não seja possivel mensagem de erro;
 
-Inserção de viagem:
-      Se destino é existente;
-      Se amigos são existentes;
-      Se amigos estão disponiveis;
-      Se sobrepõe outra viagem;
+(X)Inserção de viagem:
+      (X)Se destino é existente;
+      (X)Se amigos são existentes;
+      (X)Se amigos estão disponiveis;
+      (X)Se sobrepõe outra viagem;
 
 ( )Cancelamento de viagem:
       Destinos existentes;
